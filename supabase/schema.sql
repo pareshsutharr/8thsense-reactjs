@@ -156,9 +156,36 @@ create table if not exists public.community_posts (
   author_name text,
   image_url text not null,
   caption text,
+  status text not null default 'in_review' check (status in ('in_review', 'approved', 'rejected')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.community_posts
+  add column if not exists status text;
+
+update public.community_posts
+set status = 'in_review'
+where status is null;
+
+alter table public.community_posts
+  alter column status set default 'in_review',
+  alter column status set not null;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'community_posts_status_check'
+      and conrelid = 'public.community_posts'::regclass
+  ) then
+    alter table public.community_posts
+      add constraint community_posts_status_check
+      check (status in ('in_review', 'approved', 'rejected'));
+  end if;
+end;
+$$;
 
 create table if not exists public.community_likes (
   post_id uuid not null references public.community_posts(id) on delete cascade,
@@ -497,20 +524,26 @@ drop policy if exists "community posts are public" on public.community_posts;
 create policy "community posts are public"
 on public.community_posts for select
 to anon, authenticated
-using (true);
+using (status = 'approved');
+
+drop policy if exists "users can read own community posts" on public.community_posts;
+create policy "users can read own community posts"
+on public.community_posts for select
+to authenticated
+using (user_id = auth.uid());
 
 drop policy if exists "users can create community posts" on public.community_posts;
 create policy "users can create community posts"
 on public.community_posts for insert
 to authenticated
-with check (user_id = auth.uid());
+with check (user_id = auth.uid() and status = 'in_review');
 
 drop policy if exists "users can update own community posts" on public.community_posts;
 create policy "users can update own community posts"
 on public.community_posts for update
 to authenticated
 using (user_id = auth.uid())
-with check (user_id = auth.uid());
+with check (user_id = auth.uid() and status = 'in_review');
 
 drop policy if exists "users can delete own community posts" on public.community_posts;
 create policy "users can delete own community posts"

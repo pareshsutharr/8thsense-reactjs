@@ -32,7 +32,10 @@ export function Admin({ user }) {
     setLoading(true);
     try {
       if (tab === "posts") {
-        const { data: postsData } = await supabase.from("community_posts").select("*, profiles(display_name)").order("created_at", { ascending: false });
+        const { data: postsData } = await supabase
+          .from("community_posts")
+          .select("*, profiles(display_name, avatar_url)")
+          .order("created_at", { ascending: false });
         
         // Calculate global stats for admin
         if (postsData) {
@@ -82,6 +85,25 @@ export function Admin({ user }) {
     } else {
       alert("Error deleting item: " + error.message);
     }
+  }
+
+  async function updatePostStatus(id, status) {
+    const { data: updatedPost, error } = await supabase
+      .from("community_posts")
+      .update({ status })
+      .eq("id", id)
+      .select("*, profiles(display_name, avatar_url)")
+      .single();
+
+    if (error) {
+      alert("Error updating post: " + error.message);
+      return;
+    }
+
+    setData(prev => ({
+      ...prev,
+      posts: prev.posts.map(post => post.id === id ? updatedPost : post),
+    }));
   }
 
   async function createService(e) {
@@ -195,7 +217,12 @@ export function Admin({ user }) {
                   <div className="p-8 text-center text-slate-500">No posts found</div>
                 ) : (
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {data.posts.map(post => (
+                    {data.posts.map(post => {
+                      const status = post.status || "in_review";
+                      const isApproved = status === "approved";
+                      const isRejected = status === "rejected";
+
+                      return (
                       <article key={post.id} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                         <a href={post.image_url} target="_blank" rel="noreferrer" className="block aspect-[4/3] bg-slate-100">
                           <img
@@ -207,28 +234,77 @@ export function Admin({ user }) {
                         </a>
                         <div className="space-y-3 p-4">
                           <div className="flex items-start justify-between gap-3">
-                            <div>
-                              <h3 className="font-semibold text-slate-900">
-                                {post.profiles?.display_name || post.author_name || "Community member"}
-                              </h3>
-                              <p className="text-xs font-medium text-slate-400">
-                                {new Date(post.created_at).toLocaleDateString()}
-                              </p>
+                            <div className="flex min-w-0 items-center gap-3">
+                              {post.profiles?.avatar_url ? (
+                                <img src={post.profiles.avatar_url} alt="" className="h-10 w-10 rounded-full object-cover" />
+                              ) : (
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-black text-slate-600">
+                                  {(post.profiles?.display_name || post.author_name || "U").charAt(0).toUpperCase()}
+                                </div>
+                              )}
+                              <div className="min-w-0">
+                                <h3 className="truncate font-semibold text-slate-900">
+                                  {post.profiles?.display_name || post.author_name || "Community member"}
+                                </h3>
+                                <p className="text-xs font-medium text-slate-400">
+                                  {new Date(post.created_at).toLocaleDateString()}
+                                </p>
+                              </div>
                             </div>
-                            <button
-                              onClick={() => deleteItem("community_posts", post.id, "posts")}
-                              className="rounded-lg p-2 text-red-500 transition-colors hover:bg-red-50"
-                              aria-label="Delete community post"
-                            >
-                              <Trash2 size={18} />
-                            </button>
+                            <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${
+                              isApproved
+                                ? "bg-emerald-50 text-emerald-700"
+                                : isRejected
+                                  ? "bg-red-50 text-red-700"
+                                  : "bg-amber-50 text-amber-700"
+                            }`}>
+                              {isApproved ? "Approved" : isRejected ? "Rejected" : "In review"}
+                            </span>
                           </div>
                           <p className="min-h-10 text-sm leading-5 text-slate-600">
                             {post.caption || "No caption"}
                           </p>
+                          <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3">
+                            {!isApproved && (
+                              <button
+                                type="button"
+                                onClick={() => updatePostStatus(post.id, "approved")}
+                                className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-slate-800"
+                              >
+                                <Check size={14} />
+                                Approve
+                              </button>
+                            )}
+                            {isApproved && (
+                              <button
+                                type="button"
+                                onClick={() => updatePostStatus(post.id, "in_review")}
+                                className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition-colors hover:bg-slate-50"
+                              >
+                                Review
+                              </button>
+                            )}
+                            {!isRejected && (
+                              <button
+                                type="button"
+                                onClick={() => updatePostStatus(post.id, "rejected")}
+                                className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-100 px-3 py-2 text-xs font-bold text-red-600 transition-colors hover:bg-red-50"
+                              >
+                                Reject
+                              </button>
+                            )}
+                            <button
+                              onClick={() => deleteItem("community_posts", post.id, "posts")}
+                              className="inline-flex items-center justify-center gap-2 rounded-lg border border-red-100 px-3 py-2 text-xs font-bold text-red-600 transition-colors hover:bg-red-50"
+                              aria-label="Delete community post"
+                            >
+                              <Trash2 size={14} />
+                              Delete
+                            </button>
+                          </div>
                         </div>
                       </article>
-                    ))}
+                    )})}
                   </div>
                 )}
               </div>

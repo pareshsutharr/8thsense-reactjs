@@ -170,12 +170,14 @@ export function Gallery() {
     let { data: postsData, error: postsError } = await supabase
       .from("community_posts")
       .select("*, profiles(display_name, avatar_url)")
+      .eq("status", "approved")
       .order("created_at", { ascending: false });
 
     if (postsError) {
       const fallback = await supabase
         .from("community_posts")
         .select("*")
+        .eq("status", "approved")
         .order("created_at", { ascending: false });
 
       postsData = fallback.data;

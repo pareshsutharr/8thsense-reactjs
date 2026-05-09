@@ -150,6 +150,7 @@ export function Studio({ user }) {
         image_url: imageUrl,
         caption,
         author_name: profile?.display_name || user.user_metadata?.full_name || user.email?.split("@")[0] || "Anonymous",
+        status: "in_review",
       });
       
       if (error) throw error;
@@ -157,7 +158,7 @@ export function Studio({ user }) {
       setCaption("");
       setFile(null);
       setPreview(null);
-      setStatus({ type: "success", text: "Photo uploaded successfully! Check the Gallery." });
+      setStatus({ type: "success", text: "Photo uploaded successfully and sent for admin review." });
       
       // Refresh stats and posts
       fetchUserData();
