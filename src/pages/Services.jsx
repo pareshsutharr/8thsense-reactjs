@@ -27,11 +27,11 @@ export function Services() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-slate-50 pt-32 pb-20 border-b border-slate-100">
+      <section className="border-b border-slate-100 bg-slate-50 pb-14 pt-24 sm:pb-20 sm:pt-32">
         <div className="page-container text-center max-w-3xl mx-auto">
           <p className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Our Services</p>
           <h1 className="heading-xl mb-6">Expertise tailored to your vision.</h1>
-          <p className="text-body text-lg">
+          <p className="text-body">
             We provide premium visual storytelling services across multiple disciplines. Discover how we can elevate your brand or capture your most precious moments.
           </p>
         </div>
@@ -49,9 +49,9 @@ export function Services() {
               No services available at the moment. Please check back later.
             </div>
           ) : (
-            <div className="flex flex-col gap-24">
+            <div className="flex flex-col gap-14 md:gap-24">
               {services.map((service, index) => (
-                <div key={service.id} className={`flex flex-col md:flex-row gap-12 items-center ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
+                <div key={service.id} className={`flex flex-col items-center gap-8 md:flex-row md:gap-12 ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
                   
                   {/* Service Image */}
                   <div className="w-full md:w-1/2">
@@ -71,7 +71,7 @@ export function Services() {
                   {/* Service Content */}
                   <div className="w-full md:w-1/2 flex flex-col items-start">
                     <h2 className="heading-lg mb-4">{service.title}</h2>
-                    <p className="text-body text-lg mb-8 leading-relaxed">
+                    <p className="text-body mb-6 leading-relaxed sm:mb-8">
                       {service.description}
                     </p>
                     <button 
@@ -101,7 +101,7 @@ export function Services() {
             </p>
           </div>
           
-          <div className="bg-white p-8 md:p-12 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+          <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:rounded-3xl sm:p-8 md:p-12">
             <ContactForm defaultSubject={selectedService ? `Inquiry: ${selectedService}` : "General Inquiry"} />
           </div>
         </div>

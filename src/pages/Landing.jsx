@@ -20,9 +20,9 @@ export function Landing() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center pt-20">
-        <div className="page-container relative z-10 grid gap-12 lg:grid-cols-2 lg:gap-8 items-center pointer-events-auto">
-          <div className="flex flex-col items-start gap-8">
+      <section className="relative flex min-h-[calc(100vh-64px)] items-center py-12 sm:min-h-[90vh] sm:py-20">
+        <div className="page-container pointer-events-auto relative z-10 grid items-center gap-10 lg:grid-cols-2 lg:gap-8">
+          <div className="flex flex-col items-start gap-6 sm:gap-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-900 opacity-75"></span>
@@ -34,7 +34,7 @@ export function Landing() {
               Capturing moments<br />
               <span className="text-slate-400">creating history</span>
             </h1>
-            <p className="text-body text-xl bg-white/50 backdrop-blur-sm rounded-xl p-2 -ml-2">
+            <p className="text-body rounded-xl bg-white/50 p-2 backdrop-blur-sm sm:-ml-2">
               8thSense Production delivers premium photography, videography, and social media content for modern brands and discerning clients.
             </p>
             <div className="flex flex-wrap items-center gap-4">
@@ -47,8 +47,8 @@ export function Landing() {
             </div>
           </div>
           
-          <div className="relative">
-            <div className="aspect-[4/5] overflow-hidden rounded-3xl bg-slate-100 shadow-xl">
+          <div className="relative w-full">
+            <div className="mx-auto aspect-[4/5] max-h-[560px] max-w-[520px] overflow-hidden rounded-2xl bg-slate-100 shadow-xl sm:rounded-3xl lg:max-h-none">
               <img 
                 src="https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?auto=format&fit=crop&w=1200&q=80" 
                 alt="Photography Hero" 
@@ -73,13 +73,13 @@ export function Landing() {
       </section>
 
       {/* Image Trail Albums Section */}
-      <section className="flex w-full min-h-[72vh] justify-center items-center bg-white relative overflow-hidden py-20" ref={ref}>
+      <section className="relative flex min-h-[54vh] w-full items-center justify-center overflow-hidden bg-white py-16 sm:min-h-[72vh] sm:py-20" ref={ref}>
         <div className="absolute inset-0 z-0">
           <ImageTrail containerRef={ref}>
             {images.map((url, index) => (
               <div
                 key={index}
-                className="flex relative overflow-hidden w-24 h-24 rounded-xl shadow-md border border-slate-100 bg-white p-1"
+                className="relative flex h-20 w-20 overflow-hidden rounded-xl border border-slate-100 bg-white p-1 shadow-md sm:h-24 sm:w-24"
               >
                 <img
                   src={url}
@@ -91,7 +91,7 @@ export function Landing() {
           </ImageTrail>
         </div>
         <Link to="/portfolio" className="z-10 group relative block cursor-pointer select-none pointer-events-auto">
-          <h2 className="text-6xl md:text-8xl font-black bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-400 drop-shadow-sm transition-transform group-hover:scale-105">
+          <h2 className="bg-gradient-to-r from-slate-900 to-slate-400 bg-clip-text text-5xl font-black text-transparent drop-shadow-sm transition-transform group-hover:scale-105 sm:text-6xl md:text-8xl">
             ALBUMS
           </h2>
           <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity font-bold text-slate-900">
@@ -108,7 +108,7 @@ export function Landing() {
           title="Community Highlights" 
           heading={<>Real <span className="text-slate-400">Moments</span></>} 
         />
-        <div className="flex w-full justify-center pb-20">
+        <div className="flex w-full justify-center px-4 pb-14 sm:pb-20">
           <Link to="/gallery" className="btn-primary">
             View the Full Gallery <ArrowRight size={18} />
           </Link>
@@ -116,8 +116,8 @@ export function Landing() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-white pb-20 overflow-hidden">
-        <div className="page-container mb-12 text-center pt-20">
+      <section className="overflow-hidden bg-white pb-14 sm:pb-20">
+        <div className="page-container mb-10 pt-14 text-center sm:mb-12 sm:pt-20">
           <h2 className="heading-lg">What Our Clients Say</h2>
           <p className="text-body mt-4 max-w-2xl mx-auto">
             Don't just take our word for it. Hear from the amazing people and brands we've had the pleasure to work with.
@@ -127,7 +127,7 @@ export function Landing() {
       </section>
 
       {/* Quick Links Section (Moved to above footer) */}
-      <section className="section-padding bg-slate-50 border-t border-slate-100 pb-24">
+      <section className="section-padding border-t border-slate-100 bg-slate-50 pb-16 sm:pb-24">
         <div className="page-container">
           <div className="grid gap-8 md:grid-cols-3">
             <div className="glass-card bg-white transition-transform hover:-translate-y-1 hover:shadow-md cursor-pointer relative group">

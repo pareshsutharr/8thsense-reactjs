@@ -5,11 +5,11 @@ export function Contact() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* Header Section */}
-      <section className="bg-slate-50 pt-32 pb-20 border-b border-slate-100">
+      <section className="border-b border-slate-100 bg-slate-50 pb-14 pt-24 sm:pb-20 sm:pt-32">
         <div className="page-container text-center max-w-3xl mx-auto">
           <p className="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Get in Touch</p>
           <h1 className="heading-xl mb-6">Let's create something beautiful together.</h1>
-          <p className="text-body text-lg">
+          <p className="text-body">
             Whether you're looking to book a session, discuss a brand campaign, or just want to say hello, we'd love to hear from you.
           </p>
         </div>
@@ -18,12 +18,12 @@ export function Contact() {
       {/* Main Content */}
       <section className="section-padding">
         <div className="page-container">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
             
             {/* Contact Information */}
-            <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-8 sm:gap-12">
               <div className="prose prose-slate max-w-none">
-                <h2 className="text-3xl font-bold text-slate-900 mb-4">Contact Information</h2>
+                <h2 className="mb-4 text-2xl font-bold text-slate-900 sm:text-3xl">Contact Information</h2>
                 <p className="text-slate-600 mb-8 leading-relaxed">
                   Fill out the form to send us a direct message, or reach out using the information below. We aim to respond to all inquiries within 24-48 hours.
                 </p>
@@ -72,8 +72,8 @@ export function Contact() {
             </div>
 
             {/* Contact Form */}
-            <div className="bg-white p-8 md:p-10 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-              <h3 className="text-2xl font-bold text-slate-900 mb-8">Send a Message</h3>
+            <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:rounded-3xl sm:p-8 md:p-10">
+              <h3 className="mb-6 text-2xl font-bold text-slate-900 sm:mb-8">Send a Message</h3>
               <ContactForm />
             </div>
           </div>

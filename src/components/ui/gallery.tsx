@@ -23,8 +23,14 @@ export const PhotoGallery = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const media = window.matchMedia("(max-width: 639px)");
+    const updateMobile = () => setIsMobile(media.matches);
+    updateMobile();
+    media.addEventListener("change", updateMobile);
+
     const visibilityTimer = setTimeout(() => {
       setIsVisible(true);
     }, animationDelay * 1000);
@@ -37,6 +43,7 @@ export const PhotoGallery = ({
     );
 
     return () => {
+      media.removeEventListener("change", updateMobile);
       clearTimeout(visibilityTimer);
       clearTimeout(animationTimer);
     };
@@ -123,18 +130,22 @@ export const PhotoGallery = ({
     },
   ];
 
-  const displayPhotos = photos.length > 0 ? photos : defaultPhotos;
+  const mobileOffsets = ["-116px", "-58px", "0px", "58px", "116px"];
+  const displayPhotos = (photos.length > 0 ? photos : defaultPhotos).map((photo, index) => (
+    isMobile ? { ...photo, x: mobileOffsets[index % mobileOffsets.length], y: `${12 + index * 12}px` } : photo
+  ));
+  const photoSize = isMobile ? 156 : 220;
 
   return (
-    <div className="mt-20 relative pb-20">
+    <div className="relative mt-14 overflow-hidden pb-14 sm:mt-20 sm:pb-20">
       <div className="absolute inset-0 max-md:hidden top-[100px] -z-10 h-[300px] w-full bg-transparent bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-50 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
       <p className="lg:text-md my-2 text-center text-xs font-light uppercase tracking-widest text-slate-500">
         {title}
       </p>
-      <h3 className="z-20 mx-auto max-w-2xl justify-center bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 bg-clip-text py-3 text-center text-4xl font-black text-transparent md:text-6xl tracking-tight">
+      <h3 className="z-20 mx-auto max-w-2xl justify-center bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 bg-clip-text px-4 py-3 text-center text-3xl font-black text-transparent sm:text-4xl md:text-6xl tracking-tight">
         {heading}
       </h3>
-      <div className="relative mb-8 h-[350px] w-full items-center justify-center lg:flex mt-12">
+      <div className="relative mb-8 mt-8 h-[260px] w-full items-center justify-center sm:mt-12 sm:h-[350px] lg:flex">
         <motion.div
           className="relative mx-auto flex w-full max-w-7xl justify-center"
           initial={{ opacity: 0 }}
@@ -147,7 +158,7 @@ export const PhotoGallery = ({
             initial="hidden"
             animate={isLoaded ? "visible" : "hidden"}
           >
-            <div className="relative h-[220px] w-[220px]">
+            <div className="relative h-[156px] w-[156px] sm:h-[220px] sm:w-[220px]">
               {[...displayPhotos].reverse().map((photo) => (
                 <motion.div
                   key={photo.id}
@@ -161,8 +172,8 @@ export const PhotoGallery = ({
                   }}
                 >
                   <Photo
-                    width={220}
-                    height={220}
+                    width={photoSize}
+                    height={photoSize}
                     src={photo.src}
                     alt={photo.alt || "Photo"}
                     direction={photo.direction}

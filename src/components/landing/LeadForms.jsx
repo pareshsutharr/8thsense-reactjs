@@ -56,7 +56,7 @@ export function FeedbackForm() {
   }
 
   return (
-    <form onSubmit={submit} className="mx-auto grid max-w-[980px] gap-7 rounded-[2rem] bg-white px-6 md:p-10">
+    <form onSubmit={submit} className="mx-auto grid max-w-[980px] gap-7 rounded-2xl bg-white p-5 sm:rounded-[2rem] sm:p-7 md:p-10">
       <FormGrid>
         <Field name="name" label="Full Name" required />
         <Field name="email" label="Email Address" type="email" required />
@@ -99,7 +99,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-5 rounded-[2rem] bg-white p-7 text-slate-900">
+    <form onSubmit={submit} className="grid gap-5 rounded-2xl bg-white p-5 text-slate-900 sm:rounded-[2rem] sm:p-7">
       <Field name="name" label="Full Name" required />
       <Field name="email" label="Email Address" type="email" required />
       <Field name="subject" label="Subject" required />

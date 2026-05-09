@@ -176,9 +176,9 @@ export function Studio({ user }) {
 
   return (
     <div className="page-container section-padding max-w-5xl">
-      <div className="mb-10 flex items-center justify-between">
+      <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="heading-lg">Client Studio</h1>
-        <button onClick={logout} className="btn-secondary text-red-600 hover:bg-red-50 hover:text-red-700">
+        <button onClick={logout} className="btn-secondary w-full text-red-600 hover:bg-red-50 hover:text-red-700 sm:w-auto">
           <LogOut size={18} /> Logout
         </button>
       </div>
@@ -271,9 +271,9 @@ export function Studio({ user }) {
         </form>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-10">
+      <div className="grid gap-8 lg:grid-cols-3 lg:gap-10">
         <div className="lg:col-span-1">
-          <div className="glass-card border-slate-200 shadow-sm p-6 sticky top-24">
+          <div className="glass-card border-slate-200 shadow-sm p-5 sm:p-6 lg:sticky lg:top-24">
             <h2 className="text-xl font-bold text-slate-900 mb-2">Upload a memory</h2>
             <p className="text-body text-sm mb-6">Share your photoshoot pictures with the community.</p>
 
@@ -326,15 +326,15 @@ export function Studio({ user }) {
           </div>
           
           {loadingStats ? (
-            <div className="flex justify-center p-12">
+            <div className="flex justify-center p-8 sm:p-12">
               <Loader2 className="animate-spin text-slate-400" size={32} />
             </div>
           ) : userPosts.length === 0 ? (
-            <div className="glass-card text-center py-20 border-dashed border-2">
+            <div className="glass-card border-2 border-dashed py-14 text-center sm:py-20">
               <p className="text-slate-500 text-lg">You haven't uploaded any posts yet.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
               {userPosts.map(post => (
                 <div key={post.id} className="aspect-square relative group rounded-xl overflow-hidden bg-slate-100 cursor-pointer">
                   <img src={post.image_url} alt={post.caption || "User post"} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />

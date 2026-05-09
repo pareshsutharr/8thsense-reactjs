@@ -150,7 +150,7 @@ export function Admin({ user }) {
 
   return (
     <div className="page-container section-padding">
-      <div className="mb-16">
+      <div className="mb-10 sm:mb-16">
         <ProfileCard 
           name={user.user_metadata?.full_name || user.email?.split("@")[0] || "Admin"}
           title="Super Administrator"
@@ -161,19 +161,19 @@ export function Admin({ user }) {
           views={adminStats.views}
         />
       </div>
-      <div className="mb-10">
+      <div className="mb-8 sm:mb-10">
         <h1 className="heading-xl text-4xl mb-2">Admin CMS Dashboard</h1>
         <p className="text-body text-sm">Manage community gallery, users, content, and inquiries.</p>
       </div>
 
-      <div className="flex flex-wrap gap-4 mb-8">
+      <div className="mb-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4">
         {tabs.map(t => {
           const Icon = t.icon;
           return (
             <button 
               key={t.id}
               onClick={() => setTab(t.id)} 
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold transition-colors ${tab === t.id ? 'bg-slate-900 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
+              className={`flex items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-semibold transition-colors sm:px-5 ${tab === t.id ? 'bg-slate-900 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
             >
               <Icon size={18} /> {t.label}
             </button>
@@ -243,7 +243,7 @@ export function Admin({ user }) {
                   </div>
                 )}
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
+                  <table className="w-full min-w-[760px] text-left border-collapse">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200">
 	                      <th className="p-4 font-semibold text-slate-600">Name</th>
@@ -303,7 +303,7 @@ export function Admin({ user }) {
             {/* SERVICES TAB */}
             {tab === "services" && (
               <div className="p-4">
-                <div className="flex justify-between items-center mb-6">
+                <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="text-xl font-bold text-slate-900">Manage Services</h2>
                   <button onClick={() => setShowServiceForm(!showServiceForm)} className="btn-primary py-2 px-4 text-sm flex gap-2 items-center">
                     {showServiceForm ? <X size={16}/> : <Plus size={16}/>} {showServiceForm ? "Cancel" : "Add Service"}
@@ -311,13 +311,13 @@ export function Admin({ user }) {
                 </div>
 
                 {showServiceForm && (
-                  <form onSubmit={createService} className="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8 grid gap-4">
-                    <div className="grid grid-cols-2 gap-4">
+                  <form onSubmit={createService} className="mb-8 grid gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <input type="text" placeholder="Title" required value={newService.title} onChange={e => setNewService({...newService, title: e.target.value, slug: e.target.value.toLowerCase().replace(/ /g, "-")})} className="p-2 border rounded" />
                       <input type="text" placeholder="Slug (auto-generated)" required value={newService.slug} onChange={e => setNewService({...newService, slug: e.target.value})} className="p-2 border rounded" />
                     </div>
                     <textarea placeholder="Description" required value={newService.description} onChange={e => setNewService({...newService, description: e.target.value})} className="p-2 border rounded resize-none" rows="3" />
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <input type="text" placeholder="Image URL" value={newService.image_url} onChange={e => setNewService({...newService, image_url: e.target.value})} className="p-2 border rounded" />
                       <input type="text" placeholder="CTA Text" value={newService.cta_text} onChange={e => setNewService({...newService, cta_text: e.target.value})} className="p-2 border rounded" />
                     </div>
@@ -327,12 +327,12 @@ export function Admin({ user }) {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   {data.services.map(s => (
-                    <div key={s.id} className="border border-slate-200 rounded-xl p-4 flex gap-4 bg-white shadow-sm">
-                      <div className="w-24 h-24 bg-slate-100 rounded-lg shrink-0 overflow-hidden">
+                    <div key={s.id} className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row">
+                      <div className="h-36 w-full shrink-0 overflow-hidden rounded-lg bg-slate-100 sm:h-24 sm:w-24">
                         {s.image_url && <img src={s.image_url} alt="Service" className="w-full h-full object-cover" />}
                       </div>
                       <div className="flex-1">
-                        <div className="flex justify-between">
+                        <div className="flex justify-between gap-3">
                           <h3 className="font-bold text-slate-900">{s.title}</h3>
                           <button onClick={() => deleteItem("services", s.id, "services")} className="text-red-500 hover:bg-red-50 p-1 rounded">
                             <Trash2 size={16} />
@@ -350,7 +350,7 @@ export function Admin({ user }) {
             {/* PORTFOLIO TAB */}
             {tab === "portfolio" && (
               <div className="p-4">
-                <div className="flex justify-between items-center mb-6">
+                <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="text-xl font-bold text-slate-900">Manage Portfolio</h2>
                   <button onClick={() => setShowPortfolioForm(!showPortfolioForm)} className="btn-primary py-2 px-4 text-sm flex gap-2 items-center">
                     {showPortfolioForm ? <X size={16}/> : <Plus size={16}/>} {showPortfolioForm ? "Cancel" : "Add Item"}
@@ -358,13 +358,13 @@ export function Admin({ user }) {
                 </div>
 
                 {showPortfolioForm && (
-                  <form onSubmit={createPortfolio} className="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8 grid gap-4">
-                    <div className="grid grid-cols-2 gap-4">
+                  <form onSubmit={createPortfolio} className="mb-8 grid gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <input type="text" placeholder="Title" required value={newPortfolio.title} onChange={e => setNewPortfolio({...newPortfolio, title: e.target.value})} className="p-2 border rounded" />
                       <input type="text" placeholder="Category" required value={newPortfolio.category} onChange={e => setNewPortfolio({...newPortfolio, category: e.target.value})} className="p-2 border rounded" />
                     </div>
                     <textarea placeholder="Description" required value={newPortfolio.description} onChange={e => setNewPortfolio({...newPortfolio, description: e.target.value})} className="p-2 border rounded resize-none" rows="2" />
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <input type="text" placeholder="Image URL" required value={newPortfolio.image_url} onChange={e => setNewPortfolio({...newPortfolio, image_url: e.target.value})} className="p-2 border rounded" />
                       <input type="text" placeholder="Location" value={newPortfolio.location} onChange={e => setNewPortfolio({...newPortfolio, location: e.target.value})} className="p-2 border rounded" />
                     </div>
@@ -383,7 +383,7 @@ export function Admin({ user }) {
                       </div>
                       <div className="p-4">
                         <h3 className="font-bold text-slate-900">{p.title}</h3>
-                        <div className="flex justify-between items-center mt-1">
+                        <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
                           <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{p.category}</span>
                           <span className="text-xs text-slate-400">{p.location}</span>
                         </div>
@@ -397,7 +397,7 @@ export function Admin({ user }) {
             {/* MESSAGES TAB */}
             {tab === "messages" && (
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full min-w-[880px] text-left border-collapse">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200">
                       <th className="p-4 font-semibold text-slate-600">Status</th>

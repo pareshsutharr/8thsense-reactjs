@@ -26,13 +26,13 @@ export function Portfolio() {
   return (
     <div className="flex flex-col bg-white">
       {/* Hero with Image Trail */}
-      <div className="flex w-full h-[70vh] justify-center items-center bg-white relative overflow-hidden" ref={ref}>
+      <div className="relative flex h-[52vh] min-h-[360px] w-full items-center justify-center overflow-hidden bg-white sm:h-[64vh]" ref={ref}>
         <div className="absolute inset-0 z-0">
           <ImageTrail containerRef={ref}>
             {images.map((url, index) => (
               <div
                 key={index}
-                className="flex relative overflow-hidden w-28 h-28 rounded-xl shadow-lg border border-slate-100 bg-white p-1"
+                className="relative flex h-20 w-20 overflow-hidden rounded-xl border border-slate-100 bg-white p-1 shadow-lg sm:h-28 sm:w-28"
               >
                 <img
                   src={url}
@@ -43,14 +43,14 @@ export function Portfolio() {
             ))}
           </ImageTrail>
         </div>
-        <h1 className="text-7xl md:text-9xl font-black z-10 select-none bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-400 drop-shadow-sm pointer-events-none">
+        <h1 className="pointer-events-none z-10 select-none bg-gradient-to-r from-slate-900 to-slate-400 bg-clip-text text-5xl font-black text-transparent drop-shadow-sm sm:text-7xl md:text-9xl">
           ALBUMS
         </h1>
       </div>
 
       {/* Portfolio Details Section */}
       <div className="page-container section-padding">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 md:gap-12 lg:grid-cols-3">
           {albums.map((item) => (
             <div key={item.id} className="group flex flex-col gap-4">
               <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-slate-100">

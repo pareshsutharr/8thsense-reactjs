@@ -12,7 +12,7 @@ export function PageBand({ image, title }) {
     <div className="relative mb-16 h-72 overflow-hidden md:h-96">
       <img className="absolute inset-0 h-full w-full object-cover" src={image} alt="" />
       <div className="absolute inset-0 bg-black/55" />
-      <h2 className="relative z-10 flex h-full items-center justify-center px-6 text-center text-5xl font-light text-white md:text-7xl">
+      <h2 className="relative z-10 flex h-full items-center justify-center px-6 text-center text-4xl font-light text-white sm:text-5xl md:text-7xl">
         {title}
       </h2>
     </div>

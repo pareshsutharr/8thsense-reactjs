@@ -161,7 +161,7 @@ export function Gallery() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center p-12">
+          <div className="flex justify-center p-8 sm:p-12">
             <Loader2 className="animate-spin text-slate-400" size={32} />
           </div>
         ) : posts.length === 0 ? (
@@ -195,19 +195,19 @@ export function Gallery() {
 
       {selectedPost && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-slate-950/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
           onClick={() => setSelectedPostId(null)}
         >
           <div
-            className="grid max-h-[90vh] w-full max-w-6xl overflow-hidden rounded-2xl bg-white shadow-2xl lg:grid-cols-[minmax(0,1.35fr)_390px]"
+            className="grid max-h-[96vh] w-full max-w-6xl overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-h-[90vh] sm:rounded-2xl lg:grid-cols-[minmax(0,1.35fr)_390px]"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="flex min-h-[320px] items-center justify-center bg-slate-950">
-              <img src={selectedPost.image_url} alt={selectedPost.caption || "Community post"} className="max-h-[90vh] w-full object-contain" />
+            <div className="flex max-h-[42vh] min-h-[240px] items-center justify-center bg-slate-950 sm:max-h-[56vh] lg:max-h-[90vh]">
+              <img src={selectedPost.image_url} alt={selectedPost.caption || "Community post"} className="max-h-[42vh] w-full object-contain sm:max-h-[56vh] lg:max-h-[90vh]" />
             </div>
 
-            <aside className="flex max-h-[90vh] flex-col">
-              <div className="flex items-start justify-between gap-4 border-b border-slate-100 p-5">
+            <aside className="flex max-h-[54vh] min-h-0 flex-col sm:max-h-[90vh]">
+              <div className="flex items-start justify-between gap-4 border-b border-slate-100 p-4 sm:p-5">
                 <div className="flex min-w-0 items-center gap-3">
                   {selectedPost.avatar_url ? (
                     <img src={selectedPost.avatar_url} alt="" className="h-12 w-12 rounded-full object-cover" />
@@ -231,9 +231,9 @@ export function Gallery() {
                 </button>
               </div>
 
-              <div className="border-b border-slate-100 p-5">
+              <div className="border-b border-slate-100 p-4 sm:p-5">
                 <p className="mb-5 text-sm leading-6 text-slate-700">{selectedPost.caption || "No caption"}</p>
-                <div className="flex gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
                     onClick={() => toggleLike(selectedPost)}
@@ -250,13 +250,13 @@ export function Gallery() {
               </div>
 
               <div className="flex min-h-0 flex-1 flex-col">
-                <div className="flex items-center gap-2 border-b border-slate-100 px-5 py-4">
+                <div className="flex items-center gap-2 border-b border-slate-100 px-4 py-3 sm:px-5 sm:py-4">
                   <MessageCircle size={18} className="text-slate-500" />
                   <span className="text-sm font-bold text-slate-900">Comments</span>
                   <span className="text-sm font-semibold text-slate-400">{selectedPost.comments?.length || 0}</span>
                 </div>
 
-                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-5">
+                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-4 sm:p-5">
                   {selectedPost.comments?.length ? (
                     selectedPost.comments.map((comment) => (
                       <div key={comment.id} className="text-sm leading-6">
@@ -269,7 +269,7 @@ export function Gallery() {
                   )}
                 </div>
 
-                <form onSubmit={submitComment} className="border-t border-slate-100 p-4">
+                <form onSubmit={submitComment} className="border-t border-slate-100 p-3 sm:p-4">
                   <div className="relative">
                     <input
                       value={commentText}
