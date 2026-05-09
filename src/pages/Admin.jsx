@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Trash2, Users, Image as ImageIcon, Loader2, Briefcase, LayoutGrid, MessageSquare, Plus, Check, X } from "lucide-react";
 import { ProfileCard } from "@/components/ui/profile-card";
+import { demoPosts as galleryDemoPosts } from "@/pages/Gallery";
 
 export function Admin({ user }) {
   const [tab, setTab] = useState("posts");
@@ -36,19 +37,30 @@ export function Admin({ user }) {
           .from("community_posts")
           .select("*, profiles(display_name, avatar_url)")
           .order("created_at", { ascending: false });
+
+        const demoReviewPosts = galleryDemoPosts.map((post) => ({
+          ...post,
+          status: post.status || "in_review",
+          profiles: {
+            display_name: post.author_name,
+            avatar_url: post.avatar_url,
+          },
+        }));
+        const allPosts = [...demoReviewPosts, ...(postsData || [])];
         
         // Calculate global stats for admin
-        if (postsData) {
-          const totalViews = postsData.reduce((acc, p) => acc + (p.views || 0), 0);
+        if (allPosts) {
+          const totalViews = allPosts.reduce((acc, p) => acc + (p.views || 0), 0);
+          const demoLikes = demoReviewPosts.reduce((acc, p) => acc + (p.likes?.length || 0), 0);
           const { count: likesCount } = await supabase.from("community_likes").select("*", { count: "exact", head: true });
           
           setAdminStats({
-            posts: postsData.length,
-            likes: likesCount || 0,
+            posts: allPosts.length,
+            likes: demoLikes + (likesCount || 0),
             views: totalViews
           });
         }
-        setData(prev => ({ ...prev, posts: postsData || [] }));
+        setData(prev => ({ ...prev, posts: allPosts }));
 
       } else if (tab === "users") {
         const { data: usersData } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
@@ -79,6 +91,11 @@ export function Admin({ user }) {
 
   async function deleteItem(table, id, dataKey) {
     if (!window.confirm(`Are you sure you want to delete this item?`)) return;
+    if (String(id).startsWith("demo-")) {
+      setData(prev => ({ ...prev, [dataKey]: prev[dataKey].filter(item => item.id !== id) }));
+      return;
+    }
+
     const { error } = await supabase.from(table).delete().match({ id });
     if (!error) {
       setData(prev => ({ ...prev, [dataKey]: prev[dataKey].filter(item => item.id !== id) }));
@@ -88,6 +105,14 @@ export function Admin({ user }) {
   }
 
   async function updatePostStatus(id, status) {
+    if (String(id).startsWith("demo-")) {
+      setData(prev => ({
+        ...prev,
+        posts: prev.posts.map(post => post.id === id ? { ...post, status } : post),
+      }));
+      return;
+    }
+
     const { data: updatedPost, error } = await supabase
       .from("community_posts")
       .update({ status })

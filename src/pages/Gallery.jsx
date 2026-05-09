@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Download, Heart, Loader2, MessageCircle, Send, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
-const demoPosts = [
+export const demoPosts = [
   {
     id: "demo-urban-frame",
     is_demo: true,
