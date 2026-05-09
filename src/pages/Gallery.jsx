@@ -138,6 +138,49 @@ export const demoPosts = [
   },
 ];
 
+const DEMO_POST_STATUS_KEY = "8thsense_demo_post_statuses";
+const DEMO_POST_DELETED_KEY = "8thsense_demo_post_deleted";
+
+function readJsonStorage(key, fallback) {
+  if (typeof window === "undefined") return fallback;
+  try {
+    return JSON.parse(window.localStorage.getItem(key) || JSON.stringify(fallback));
+  } catch {
+    return fallback;
+  }
+}
+
+export function getDemoPostStatuses() {
+  return readJsonStorage(DEMO_POST_STATUS_KEY, {});
+}
+
+export function setDemoPostStatus(id, status) {
+  if (typeof window === "undefined") return;
+  const statuses = getDemoPostStatuses();
+  window.localStorage.setItem(DEMO_POST_STATUS_KEY, JSON.stringify({ ...statuses, [id]: status }));
+}
+
+export function getDeletedDemoPostIds() {
+  return readJsonStorage(DEMO_POST_DELETED_KEY, []);
+}
+
+export function deleteDemoPost(id) {
+  if (typeof window === "undefined") return;
+  const deletedIds = new Set(getDeletedDemoPostIds());
+  deletedIds.add(id);
+  window.localStorage.setItem(DEMO_POST_DELETED_KEY, JSON.stringify([...deletedIds]));
+}
+
+export function getModeratedDemoPosts({ includeAll = false } = {}) {
+  const statuses = getDemoPostStatuses();
+  const deletedIds = new Set(getDeletedDemoPostIds());
+
+  return demoPosts
+    .filter((post) => !deletedIds.has(post.id))
+    .map((post) => ({ ...post, status: statuses[post.id] || "in_review" }))
+    .filter((post) => includeAll || post.status === "approved");
+}
+
 export function Gallery() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -186,7 +229,7 @@ export function Gallery() {
 
     if (postsError) {
       console.error("Error loading gallery posts:", postsError);
-      setPosts(demoPosts);
+      setPosts(getModeratedDemoPosts());
       setLoading(false);
       return;
     }
@@ -219,7 +262,7 @@ export function Gallery() {
       };
     });
 
-    setPosts([...demoPosts, ...enrichedPosts]);
+    setPosts([...getModeratedDemoPosts(), ...enrichedPosts]);
     setLoading(false);
   }
 

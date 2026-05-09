@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Trash2, Users, Image as ImageIcon, Loader2, Briefcase, LayoutGrid, MessageSquare, Plus, Check, X } from "lucide-react";
 import { ProfileCard } from "@/components/ui/profile-card";
-import { demoPosts as galleryDemoPosts } from "@/pages/Gallery";
+import { deleteDemoPost, getModeratedDemoPosts, setDemoPostStatus } from "@/pages/Gallery";
 
 export function Admin({ user }) {
   const [tab, setTab] = useState("posts");
@@ -39,7 +39,7 @@ export function Admin({ user }) {
           .select("*, profiles(display_name, avatar_url)")
           .order("created_at", { ascending: false });
 
-        const demoReviewPosts = galleryDemoPosts.map((post) => ({
+        const demoReviewPosts = getModeratedDemoPosts({ includeAll: true }).map((post) => ({
           ...post,
           status: post.status || "in_review",
           profiles: {
@@ -93,6 +93,7 @@ export function Admin({ user }) {
   async function deleteItem(table, id, dataKey) {
     if (!window.confirm(`Are you sure you want to delete this item?`)) return;
     if (String(id).startsWith("demo-")) {
+      deleteDemoPost(id);
       setData(prev => ({ ...prev, [dataKey]: prev[dataKey].filter(item => item.id !== id) }));
       return;
     }
@@ -107,6 +108,7 @@ export function Admin({ user }) {
 
   async function updatePostStatus(id, status) {
     if (String(id).startsWith("demo-")) {
+      setDemoPostStatus(id, status);
       setData(prev => ({
         ...prev,
         posts: prev.posts.map(post => post.id === id ? { ...post, status } : post),
