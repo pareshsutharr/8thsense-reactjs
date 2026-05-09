@@ -9,5 +9,16 @@ if (!supabaseUrl || !supabaseKey) {
 
 export const supabase = createClient(supabaseUrl ?? "", supabaseKey ?? "");
 
-export const getAppUrl = () =>
-  import.meta.env.VITE_APP_URL || window.location.origin;
+export const getAppUrl = () => {
+  const configuredUrl = import.meta.env.VITE_APP_URL;
+  const currentOrigin = window.location.origin;
+
+  if (!configuredUrl) return currentOrigin;
+
+  const configuredHost = new URL(configuredUrl).hostname;
+  const currentHost = window.location.hostname;
+  const configuredIsLocal = ["localhost", "127.0.0.1"].includes(configuredHost);
+  const currentIsLocal = ["localhost", "127.0.0.1"].includes(currentHost);
+
+  return configuredIsLocal && !currentIsLocal ? currentOrigin : configuredUrl;
+};

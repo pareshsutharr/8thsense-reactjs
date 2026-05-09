@@ -238,16 +238,10 @@ export const Photo = ({
 
   return (
     <motion.div
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       whileTap={{ scale: 1.2, zIndex: 9999 }}
       whileHover={{
         scale: 1.1,
         rotateZ: 2 * (direction === "left" ? -1 : 1),
-        zIndex: 9999,
-      }}
-      whileDrag={{
-        scale: 1.1,
         zIndex: 9999,
       }}
       initial={{ rotate: 0 }}
@@ -261,11 +255,11 @@ export const Photo = ({
         WebkitTouchCallout: "none",
         WebkitUserSelect: "none",
         userSelect: "none",
-        touchAction: "none",
+        touchAction: "pan-y",
       }}
       className={cn(
         className,
-        "relative mx-auto shrink-0 cursor-grab active:cursor-grabbing bg-white p-3 pb-10 shadow-xl rounded-sm border border-slate-100"
+        "relative mx-auto shrink-0 bg-white p-3 pb-10 shadow-xl rounded-sm border border-slate-100"
       )}
       onMouseMove={handleMouse}
       onMouseLeave={resetMouse}

@@ -37,7 +37,7 @@ function AlbumTrailSection() {
   return (
     <div
       ref={ref}
-      className="relative mx-auto mt-12 flex h-[70vh] min-h-[520px] max-w-[1480px] items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-white px-6 text-center shadow-2xl shadow-black/25"
+      className="relative mx-auto mt-12 flex h-[56vh] min-h-[420px] max-w-[1480px] items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-white px-6 text-center shadow-2xl shadow-black/25"
     >
       <ImageTrail containerRef={ref} rotationRange={18} interval={80}>
         {images.map((url, index) => (
@@ -56,7 +56,7 @@ function AlbumTrailSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_38%,rgba(255,255,255,.86)_76%)]" />
       <div className="relative z-10">
         <p className="mb-4 text-sm font-black uppercase tracking-[0.35em] text-[#ff5616]">Move cursor</p>
-        <h3 className="select-none bg-gradient-to-r from-neutral-950 to-neutral-500 bg-clip-text text-7xl font-black uppercase leading-none text-transparent md:text-9xl">
+        <h3 className="select-none bg-gradient-to-r from-neutral-950 to-neutral-500 bg-clip-text text-6xl font-black uppercase leading-none text-transparent md:text-8xl">
           Albums
         </h3>
       </div>

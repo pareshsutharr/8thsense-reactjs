@@ -73,7 +73,7 @@ export function Landing() {
       </section>
 
       {/* Image Trail Albums Section */}
-      <section className="flex w-full min-h-screen justify-center items-center bg-white relative overflow-hidden" ref={ref}>
+      <section className="flex w-full min-h-[72vh] justify-center items-center bg-white relative overflow-hidden py-20" ref={ref}>
         <div className="absolute inset-0 z-0">
           <ImageTrail containerRef={ref}>
             {images.map((url, index) => (
@@ -91,7 +91,7 @@ export function Landing() {
           </ImageTrail>
         </div>
         <Link to="/portfolio" className="z-10 group relative block cursor-pointer select-none pointer-events-auto">
-          <h2 className="text-7xl md:text-9xl font-black bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-400 drop-shadow-sm transition-transform group-hover:scale-105">
+          <h2 className="text-6xl md:text-8xl font-black bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-400 drop-shadow-sm transition-transform group-hover:scale-105">
             ALBUMS
           </h2>
           <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity font-bold text-slate-900">
