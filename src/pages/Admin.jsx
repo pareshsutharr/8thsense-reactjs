@@ -15,6 +15,7 @@ export function Admin({ user }) {
   });
   const [loading, setLoading] = useState(true);
   const [adminStats, setAdminStats] = useState({ posts: 0, likes: 0, views: 0 });
+  const [postFilter, setPostFilter] = useState("in_review");
   const [roleUpdatingId, setRoleUpdatingId] = useState(null);
   const [roleStatus, setRoleStatus] = useState({ type: "", text: "" });
 
@@ -195,6 +196,26 @@ export function Admin({ user }) {
     { id: "messages", label: "Messages", icon: MessageSquare },
   ];
 
+  const postFilters = [
+    { id: "in_review", label: "Pending Review" },
+    { id: "approved", label: "Approved" },
+    { id: "rejected", label: "Rejected" },
+    { id: "all", label: "All" },
+  ];
+
+  const postCounts = data.posts.reduce((counts, post) => {
+    const status = post.status || "in_review";
+    return {
+      ...counts,
+      [status]: (counts[status] || 0) + 1,
+      all: counts.all + 1,
+    };
+  }, { in_review: 0, approved: 0, rejected: 0, all: 0 });
+
+  const visiblePosts = postFilter === "all"
+    ? data.posts
+    : data.posts.filter((post) => (post.status || "in_review") === postFilter);
+
   return (
     <div className="page-container section-padding">
       <div className="mb-10 sm:mb-16">
@@ -238,11 +259,36 @@ export function Admin({ user }) {
             {/* POSTS TAB */}
             {tab === "posts" && (
               <div className="p-4">
-                {data.posts.length === 0 ? (
-                  <div className="p-8 text-center text-slate-500">No posts found</div>
+                <div className="mb-5 flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900">Post Review</h2>
+                    <p className="text-sm text-slate-500">Approve uploads before they appear in the public gallery.</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+                    {postFilters.map((filter) => (
+                      <button
+                        key={filter.id}
+                        type="button"
+                        onClick={() => setPostFilter(filter.id)}
+                        className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
+                          postFilter === filter.id
+                            ? "bg-slate-900 text-white"
+                            : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                        }`}
+                      >
+                        {filter.label} ({postCounts[filter.id] || 0})
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {visiblePosts.length === 0 ? (
+                  <div className="p-8 text-center text-slate-500">
+                    No {postFilters.find((filter) => filter.id === postFilter)?.label.toLowerCase()} posts found
+                  </div>
                 ) : (
                   <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {data.posts.map(post => {
+                    {visiblePosts.map(post => {
                       const status = post.status || "in_review";
                       const isApproved = status === "approved";
                       const isRejected = status === "rejected";

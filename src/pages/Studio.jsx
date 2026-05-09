@@ -175,6 +175,20 @@ export function Studio({ user }) {
     navigate("/");
   }
 
+  function postStatusLabel(post) {
+    const value = post.status || "in_review";
+    if (value === "approved") return "Approved";
+    if (value === "rejected") return "Rejected";
+    return "Pending review";
+  }
+
+  function postStatusClass(post) {
+    const value = post.status || "in_review";
+    if (value === "approved") return "bg-emerald-500 text-white";
+    if (value === "rejected") return "bg-red-500 text-white";
+    return "bg-amber-400 text-slate-950";
+  }
+
   return (
     <div className="page-container section-padding max-w-5xl">
       <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -339,6 +353,9 @@ export function Studio({ user }) {
               {userPosts.map(post => (
                 <div key={post.id} className="aspect-square relative group rounded-xl overflow-hidden bg-slate-100 cursor-pointer">
                   <img src={post.image_url} alt={post.caption || "User post"} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <span className={`absolute left-2 top-2 rounded-full px-2.5 py-1 text-[11px] font-black uppercase tracking-wide shadow-sm ${postStatusClass(post)}`}>
+                    {postStatusLabel(post)}
+                  </span>
                   <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
                     <p className="text-white text-sm font-medium text-center line-clamp-3">
                       {post.caption || "No caption"}
