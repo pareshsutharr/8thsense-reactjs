@@ -2,6 +2,142 @@ import { useEffect, useMemo, useState } from "react";
 import { Download, Heart, Loader2, MessageCircle, Send, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
+const demoPosts = [
+  {
+    id: "demo-urban-frame",
+    is_demo: true,
+    author_name: "Aarav Mehta",
+    avatar_url: "https://api.dicebear.com/9.x/personas/svg?seed=Aarav",
+    image_url: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=85",
+    caption: "Late-night camera tests before a brand film shoot.",
+    created_at: "2026-05-08T18:20:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }],
+    comments: [
+      { id: "demo-urban-frame-c1", profiles: { display_name: "Riya Shah" }, content: "This lighting feels premium." },
+      { id: "demo-urban-frame-c2", profiles: { display_name: "Neel Patel" }, content: "The orange tone is perfect for a campaign teaser." },
+    ],
+  },
+  {
+    id: "demo-wedding-glow",
+    is_demo: true,
+    author_name: "Riya Shah",
+    avatar_url: "https://api.dicebear.com/9.x/personas/svg?seed=Riya",
+    image_url: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85",
+    caption: "Soft wedding details from an evening celebration.",
+    created_at: "2026-05-07T20:12:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }, { user_id: "demo-d" }],
+    comments: [
+      { id: "demo-wedding-glow-c1", profiles: { display_name: "Aarav Mehta" }, content: "Beautiful tones and composition." },
+    ],
+  },
+  {
+    id: "demo-fashion-editorial",
+    is_demo: true,
+    author_name: "Kabir Joshi",
+    avatar_url: "https://api.dicebear.com/9.x/adventurer/svg?seed=Kabir",
+    image_url: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=85",
+    caption: "Editorial frame for a creator profile launch.",
+    created_at: "2026-05-07T12:40:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }, { user_id: "demo-d" }, { user_id: "demo-e" }],
+    comments: [
+      { id: "demo-fashion-editorial-c1", profiles: { display_name: "Meera Iyer" }, content: "Looks like a magazine cover." },
+      { id: "demo-fashion-editorial-c2", profiles: { display_name: "Dev Rana" }, content: "Clean direction." },
+    ],
+  },
+  {
+    id: "demo-product-story",
+    is_demo: true,
+    author_name: "Meera Iyer",
+    avatar_url: "https://api.dicebear.com/9.x/personas/svg?seed=Meera",
+    image_url: "https://images.unsplash.com/photo-1517142089942-ba376ce32a2e?auto=format&fit=crop&w=1200&q=85",
+    caption: "Minimal product story with a bright lifestyle setup.",
+    created_at: "2026-05-06T16:05:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }],
+    comments: [
+      { id: "demo-product-story-c1", profiles: { display_name: "Nisha Rao" }, content: "Love the clean backdrop." },
+    ],
+  },
+  {
+    id: "demo-live-music",
+    is_demo: true,
+    author_name: "Dev Rana",
+    avatar_url: "https://api.dicebear.com/9.x/adventurer/svg?seed=Dev",
+    image_url: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=85",
+    caption: "Crowd energy from a live event highlight reel.",
+    created_at: "2026-05-05T22:10:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }, { user_id: "demo-d" }, { user_id: "demo-e" }, { user_id: "demo-f" }],
+    comments: [
+      { id: "demo-live-music-c1", profiles: { display_name: "Kabir Joshi" }, content: "This needs to be the event cover." },
+    ],
+  },
+  {
+    id: "demo-studio-portrait",
+    is_demo: true,
+    author_name: "Nisha Rao",
+    avatar_url: "https://api.dicebear.com/9.x/personas/svg?seed=Nisha",
+    image_url: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1200&q=85",
+    caption: "Studio portrait session for a personal brand refresh.",
+    created_at: "2026-05-04T14:32:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }],
+    comments: [
+      { id: "demo-studio-portrait-c1", profiles: { display_name: "Riya Shah" }, content: "Very natural and confident." },
+      { id: "demo-studio-portrait-c2", profiles: { display_name: "Aarav Mehta" }, content: "Great skin tones." },
+    ],
+  },
+  {
+    id: "demo-corporate-film",
+    is_demo: true,
+    author_name: "Tara Singh",
+    avatar_url: "https://api.dicebear.com/9.x/adventurer/svg?seed=Tara",
+    image_url: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1200&q=85",
+    caption: "Behind the scenes from a corporate film setup.",
+    created_at: "2026-05-03T11:18:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }, { user_id: "demo-d" }],
+    comments: [
+      { id: "demo-corporate-film-c1", profiles: { display_name: "Meera Iyer" }, content: "The setup looks sharp." },
+    ],
+  },
+  {
+    id: "demo-travel-moment",
+    is_demo: true,
+    author_name: "Ishan Kapoor",
+    avatar_url: "https://api.dicebear.com/9.x/personas/svg?seed=Ishan",
+    image_url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85",
+    caption: "Golden-hour frame from a destination album.",
+    created_at: "2026-05-02T17:45:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }, { user_id: "demo-d" }, { user_id: "demo-e" }],
+    comments: [
+      { id: "demo-travel-moment-c1", profiles: { display_name: "Tara Singh" }, content: "This one feels cinematic." },
+    ],
+  },
+  {
+    id: "demo-social-campaign",
+    is_demo: true,
+    author_name: "Sara Khan",
+    avatar_url: "https://api.dicebear.com/9.x/personas/svg?seed=Sara",
+    image_url: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?auto=format&fit=crop&w=1200&q=85",
+    caption: "Content planning day for a social media campaign.",
+    created_at: "2026-05-01T10:05:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }],
+    comments: [
+      { id: "demo-social-campaign-c1", profiles: { display_name: "Ishan Kapoor" }, content: "This fits the brand mood." },
+    ],
+  },
+  {
+    id: "demo-food-brand",
+    is_demo: true,
+    author_name: "Neel Patel",
+    avatar_url: "https://api.dicebear.com/9.x/adventurer/svg?seed=Neel",
+    image_url: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1200&q=85",
+    caption: "Food brand shoot with crisp textures and natural light.",
+    created_at: "2026-04-30T13:25:00+05:30",
+    likes: [{ user_id: "demo-a" }, { user_id: "demo-b" }, { user_id: "demo-c" }, { user_id: "demo-d" }],
+    comments: [
+      { id: "demo-food-brand-c1", profiles: { display_name: "Sara Khan" }, content: "So fresh. Great for reels too." },
+    ],
+  },
+];
+
 export function Gallery() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,7 +184,7 @@ export function Gallery() {
 
     if (postsError) {
       console.error("Error loading gallery posts:", postsError);
-      setPosts([]);
+      setPosts(demoPosts);
       setLoading(false);
       return;
     }
@@ -81,7 +217,7 @@ export function Gallery() {
       };
     });
 
-    setPosts(enrichedPosts);
+    setPosts([...demoPosts, ...enrichedPosts]);
     setLoading(false);
   }
 
@@ -96,6 +232,22 @@ export function Gallery() {
   async function toggleLike(post) {
     if (!session?.user) {
       alert("Please sign in to like posts.");
+      return;
+    }
+
+    if (post.is_demo) {
+      setPosts((currentPosts) =>
+        currentPosts.map((currentPost) => {
+          if (currentPost.id !== post.id) return currentPost;
+          const alreadyLiked = currentPost.likes?.some((like) => like.user_id === session.user.id);
+          return {
+            ...currentPost,
+            likes: alreadyLiked
+              ? currentPost.likes.filter((like) => like.user_id !== session.user.id)
+              : [...(currentPost.likes || []), { user_id: session.user.id }],
+          };
+        }),
+      );
       return;
     }
 
@@ -117,6 +269,26 @@ export function Gallery() {
     if (!selectedPost || !commentText.trim()) return;
 
     setSubmittingComment(true);
+
+    if (selectedPost.is_demo) {
+      const nextComment = {
+        id: `${selectedPost.id}-comment-${Date.now()}`,
+        profiles: { display_name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "You" },
+        content: commentText.trim(),
+      };
+
+      setPosts((currentPosts) =>
+        currentPosts.map((post) =>
+          post.id === selectedPost.id
+            ? { ...post, comments: [...(post.comments || []), nextComment] }
+            : post,
+        ),
+      );
+      setCommentText("");
+      setSubmittingComment(false);
+      return;
+    }
+
     const { error } = await supabase.from("community_comments").insert({
       post_id: selectedPost.id,
       user_id: session.user.id,
